@@ -459,11 +459,16 @@ async function removeDepartment() {
   await db.removeDepartment(departmentId);
   loadEmployeeTrackerQuestions();
 }
-
+// not sure how to do this
 // view total payroll
 
 // view department specific payroll
 
 // view role specific payroll
+
+function quit() {
+  console.log("Goodbye!");
+  process.exit();
+}
 
 init();

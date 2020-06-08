@@ -130,10 +130,12 @@ class DB {
       departmentId
     );
   }
-
+  // not sure how to do this
   // view total payroll
 
   // view department specific payroll
 
   // view role specific payroll
 }
+
+module.exports = new DB(connection);
