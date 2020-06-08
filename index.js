@@ -158,16 +158,139 @@ async function viewEmployees() {
     loadEmployeeTrackerQuestions();
 };
 
-async function viewEmployeesByDepartment(){
-    const departments = await db.findAllDepartments();
+// view employees by department
+async function viewEmployeesByDepartment() {
+    const departments = await db.findAllEmployeesByDepartments();
     const departmentChoices = departments.map (({
-        id, name
+        id,
+        name
     }) => ({ 
-        name:  name,
+        name: name,
         value: id 
-    }));
+        }));
+    const { departmentId } = await prompt([{
+        type: "list",
+        name: "departmentId",
+        message "Which department would you like to display?",
+        choices: departmentChoices
+    }]);
+    const employees = await db.findAllEmployeesByDepartment(departmentId);
+    console.log('\n');
+    console.table(employees);
+    loadEmployeeTrackerQuestions();
+};
 
-}
+// view employees by manager
+
+async function viewEmployeesByManager() {
+    const managers = await db.findAllEmployeesByManager();
+    const managerChoices = managers.map(({
+        id,
+        first_name,
+        last_name
+    }) => ({
+        name: `${first_name} ${last_name}`,
+        value: id
+        }));
+    const { managerId } = await prompt(({
+        type: "list",
+        name: "managerId",
+        message: "Which manager's direct reports would you like to display?", choices: managerChoices
+    }));
+    const employees = await db.findAllEmployeesByManager(managerId);
+    console.log('\n');
+    if (employees.lenghth === 0) {
+        console.log('No direct reports.');
+    } else {
+        console.table(employees);
+    }
+    loadEmployeeTrackerQuestions();
+};
+
+// view employees by role. Not required, but I wanted to test my understanding.
+// get someone to look at it.
+
+async function viewEmployeesByRole() {
+    const employees = await db.findAllEmployeesByRole();
+    const roleChoices = roles.map(({
+        id,
+        first_name,
+        last_name
+    }) => ({
+        name: `${first_name} ${last_name}`,
+        value: id
+        }));
+    const { roleId } = await prompt(({
+        type: "list",
+        name: "roleId",
+        message: "Which role's roster do you wish to view?", choices: managerChoices
+    }));
+    const employees = await db.findAllEmployeesByRole(roleId);
+    console.log('\n');
+    if (employees.lenghth === 0) {
+        console.log('None specified.');
+    } else {
+        console.table(employees);
+    }
+    loadEmployeeTrackerQuestions();
+};
+
+// add new employee
+
+async function addNewEmployee() {
+    const employees = await db.findAllEmployees();
+    const roles = await db.findAllRoles();
+    const employee = await prompt({
+        name: "first_name",
+        message: "What is the new employee's first name?"
+    },
+    {
+        name: "last_name",
+        message: "What is the new employee's last name?"
+        });
+    const roleChoices = roles.map(({
+        id,
+        title
+    }) => ({
+        name: title,
+        value: id
+        }));
+    const {
+        roleId
+    } = await prompt([
+        type: "list",
+        name: "roleId",
+        message: "What is the new employee's role.",
+        choices: roleChoices
+    ]);
+    employee.role_id = roleId;
+    const managerChoices = employee.map(({
+        id,
+        first_name,
+        last_name,
+    }) => ({
+        name: `${first_name} ${last_name}`,
+        value: id
+        }));
+    managerChoices.unshift({
+        name: "None",
+        value: null
+    });
+    const { managerId } = await prompt({
+        type: "list",
+        name: "managerId",
+        message: "Who is the new employee's manager?",
+        choices: managerChoices
+    });
+    employee.manager_id = managerId;
+    await db.createEmployee(employee);
+    console.log(`${employee.first_name} ${employee.last_name} has been added.`);
+    loadEmployeeTrackerQuestions();
+};
+
+
+
+
 
 
 
