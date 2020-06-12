@@ -4,9 +4,14 @@ const mysql = require("mysql");
 const db = require("./db");
 const util = require("util");
 const { prompt } = require("inquirer");
+const logo = require("asciiart-logo");
 
 function init() {
+  const logoText = logo({
+    name: "Employee Tracker",
+  }).render();
   console.log("Employee Tracker");
+  console.log(logoText);
   loadEmployeeTrackerQuestions();
 }
 async function loadEmployeeTrackerQuestions() {
@@ -402,7 +407,7 @@ async function addEmployeeRoles() {
       choices: departmentChoices,
     },
   ]);
-  await db.createEmployeeRole(role);
+  await db.addEmployeeRoles(role);
   console.log(`${role.title} has been added to the database.`);
   loadEmployeeTrackerQuestions();
 }

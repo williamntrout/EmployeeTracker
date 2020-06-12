@@ -101,7 +101,7 @@ class DB {
   }
 
   // add new roles
-  createEmployeeRoles(role) {
+  addEmployeeRoles(role) {
     return this.connection.query("INSERT INTO role SET ?", role);
   }
 
