@@ -19,7 +19,7 @@ CREATE TABLE role (
         ON DELETE CASCADE
 );
 
-CREATE TABLE (
+CREATE TABLE employee(
     id IN UNSIGNED AUTO_INCREMENT NOT NULL,
     first_name VARCHAR (30) UNIQUE NOT NULL,
     last_name VARCHAR (30) UNIQUE NOT NULL,
@@ -33,6 +33,6 @@ CREATE TABLE (
     INDEX manager_id (manager_id),
     CONSTRAINT fk_manager
         FOREIGN KEY (manager_id)
-        REFERENCES manager(id)
+        REFERENCES employee(id)
         ON DELETE SET NULL
 );
